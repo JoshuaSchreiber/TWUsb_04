@@ -1,0 +1,80 @@
+
+Version 2.4 - 18.06.2007
+	
+	-Auf JDK 5.0 umgestellt
+	
+	-Log4J eingebaut deshalb
+		-/log4j*.jar neu, muss jetzt im Classpath stehen
+		-/log4j.xml neu, kann fürs logging angepasst werden
+		- alle System.out. entfernt
+	
+	-TWUsb.dll jetzt neue Version 24
+		-Fix: SearchDevice
+		-Fix: in OpenDevice
+		-Fix: in CloseDevice
+		etwas anders verhalten im Exception verhalten und abfangen von Fehlern.
+		-Neue TWUsbDeviceNotOpen Klasse wird jetzt immer geworfen wenn OpenDevice vergessen wurde,
+		 CloseDevice kann jetzt immer und auch mehrfach aufgerufen werden
+		
+	-TWKonstanten auf Version 24 angepasst
+		
+	-Javadoc neu und erweitert
+	
+	-Beispiel Gui mit neuem Menü Info, dort kann die Auto Search Funktion getestet werden,
+		-Gui centriert, gif auf connect button
+
+
+	-Test von JUnit auf TestNG umgestellt
+	-Neue Testklasse
+	
+	-gelöscht FILE_ID.DIZ und TWUsb.xml
+	
+	-Ant Task auf Vers. 24 angepasst, jetzt Version 1.1.1
+
+	-TWUsbServer auf Vers. 24 angepasst, jetzt Version 1.2.0 für Tomcate 1.6
+	
+
+Version 2.3 - 19.01.2006
+
+	-Drei neue Funktionen dem der TWUsb.DLL hinzugefügt, update auf neuen Velleman Device Treiber 2.0
+		-SearchDevices
+		-SetCurrentDevice
+		-Version
+		
+	-TWUsb.jar umd diese 3 neue Funktionen erweitert
+	
+	-Versions Nr. auf 23 gesetzt.
+	
+	-Neue Exception Klassen erstellt und in neues Package verschoben
+	-Neues TWUsbKonstante Interface mit alle Konstanten erstellt.
+	-Refactoring: Neues TWUsbAbstract Klasse erstellt.
+	
+	-TWGui zum Teste der 3 neuen Funktionen erweitert.
+	
+	-Neues Beobachter Package mit 4 Klassen für die digitalen Eingänge erstellt.
+	
+	-Zwei neue Testklassen als Beispiel die	Beobachter.java und TestBeobachter.java
+	-Neue Klassen TWUsbCheck und TWUsbMsg für spätere Internationalisierung vorbereitet
+	
+	-TWUsbAnt an neue Version angepasst.
+
+
+Version 2.2 - 16.05.2005
+	-TWUsbServer in /server Verzeichnis hinzugefügt, damit die Steuerung über das Internet
+	 mit einem Brwoser angesprochen werden kann.
+	 
+Version 2.1 - 07.04.2005
+	-Bug bei wiederholten OpenDevice und CloseDevice in TWUsb.dll Version 21 behoben.
+	 Neue TWUsb.jar auf neue Version 21 angepasst.
+	-Neuen ANT Task zur Steuerung des Board über ein build.xml Script im
+	 Verzeichnis /ant mit Beispielen und Javadoc hinzugefügt.
+	-MD5 checksumm Dateien für das testen der Integrität der Archive erzeugt.
+	-Neue releas_notes.txt eingeführt.
+	-Den build automatisiert mit build.xml
+	-twusb.xml und FILE_ID.DIZ auf neue Version angepasst.
+	-Javadoc erweitert.
+
+Version 2.0 - 24.10.2004
+	-Artikel über den TWUsb Framework im Javamagazin 03/2005 veröffentlicht. 
+	 Auf Begleit CD-ROM diese Version freigegeben.
+	 

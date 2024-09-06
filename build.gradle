@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation files('JAR_Dateien/TWUsb.jar')
+    implementation files('JAR_Dateien/de.wenzlaff.twusb_1.2.4.jar')
+    implementation files('JAR_Dateien/log4j-1.2.13.jar')
+
+}
+
+
+test {
+    useJUnitPlatform()
+}

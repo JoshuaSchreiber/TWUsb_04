@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+  <HEAD>
+    <TITLE>
+      TWUsbServer 1.12.0
+    </TITLE>
+  </HEAD>
+  <BODY>
+    <H1>
+      TWUsbServer 1.2.0
+    </H1>
+    <A name="top"></A> <BR>
+     
+    <P>
+      Dieses Dokument beschreibt die Installation der TWUsbServers Anwendung auf einen Tomcat Server.
+    </P>
+    <P>
+      Getestet wurde auf Apache Tomcat/6.0.10/Windows XP mit MSIE 6.0 SP2.<BR>
+	  Bei andere Versionen und Betriebssysteme muss &auml;hnlich vorgegangen werden.
+    </P>
+    <H2>
+      Installation:
+    </H2>
+    1. Treiber von der Firma Velleman installieren (Version 2.0). <BR>
+     2. <B>TWUsb.dll</B> in das <B>Windows/System32</B> Verzeichnis kopieren. <BR>
+     3. Tomcat Server 6.0 und JAVA Version >= 1.5 installieren <BR>
+     4. Kopieren des <B>twusbserver.war</B> in das <B>/webapps</B> Verzeichnis von Tomcat oder das <B>twusbserver.war</B> &uuml;ber die Manager Konsole hochladen <B>
+    http://localhost:8080/manager/html</B> <BR>
+     5. Starten des Tomcat Servers durch ausf&uuml;hren <B>/bin/tomcat6.exe</B> bzw. &uuml;ber das Start Men&uuml;. <BR>
+     6. Aufrufen der Application im Browser &uuml;ber die URL: <A href="http://localhost:8080/twusbserver">http://localhost:8080/twusbserver</A> <BR>
+     7. Die Anwendung erscheint im Browser: <BR>
+    <BR>
+     <IMG src="twusbserver.jpg" width="882" height="746" border="0" alt="Bild vom TWUsbServer im Browser"><BR>
+    <H2>
+      Tips:
+    </H2>
+    Sollte nach dem klicken auf senden eine:<BR>
+     <B>java.lang.UnsatisfiedLinkError: no TWUsb in java.library.path</B><BR>
+     Meldung kommen, dann findet der Tomcat die <B>TWUsb.dll</B> nicht. Die muss in das Windows/System32 Verzeichnis kopiert werden. Dann muss der Server neu gestartet werden.<BR>
+     <BR>
+     Der Port der in der default Einstellung 8080 ist, kann in der <B>/conf/server.xml</B> von Tomcat ge&auml;ndert werden.<BR>
+     <BR>
+     Wenn einige Button nicht funktionieren, &uuml;berpr&uuml;fen ob JavaScript im Browser angeschaltet ist. <!--          FUSS Start Validiert                     --> <BR>
+     <BR>
+     
+    <CENTER>
+      <HR>
+      <SMALL><A href="http://www.wenzlaff.de/spenden.html">[Spende]</A> - <A href="#top">[Top]</A> - <A href="http://www.wenzlaff.de">[Home]</A> - <A href="http://www.wenzlaff.de/tools.html">
+      [Tools]</A> - <A href="http://www.wenzlaff.de/inhalt.html">[Text]</A> - <A href="http://www.wenzlaff.de/suche.html">[Suche]</A> - <A href="http://www.wenzlaff.de/kontakt.html">
+      [Kontakt]</A>&nbsp; <A href="http://www.wenzlaff.de/wenzlaff.xml"></A></SMALL> 
+      <HR>
+      <SMALL>Copyright &copy;2005-2007 by Thomas Wenzlaff<BR>
+       Alle Rechte vorbehalten. <A href="http://www.wenzlaff.de/recht.html">Disclaimer</A><BR>
+       http://www.wenzlaff.de vom 11.02.2006<BR>
+      </SMALL>
+    </CENTER>
+    <BR>
+  </BODY>
+</HTML>
+
