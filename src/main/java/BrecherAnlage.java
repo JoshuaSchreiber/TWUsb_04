@@ -19,58 +19,106 @@ public class BrecherAnlage {
             // *****************************************************************
 
 
+
+
+            /**
+             * Aktions:
+             * Min:
+             *  Motor M3 und M4
+             *  Schieber
+             * NichtMin:
+             *  M3 aus
+             *  Schieber zu
+             * NichtMiddle:
+             *  M1 und M2
+             *  Felsbrocken einfüllung notwendig
+             * Max:
+             *  M1 und M2 aus
+             *  Felsbrocken nicht mehr einfüllen
+             * NotAus
+             *  Alle motoren aus
+             *  Schieber aus
+             *
+             *
+             * Wenn M3 Überlastet
+             *  Schieber schließen
+             *  M3 aus
+             *
+             */
+
             boolean[] output = {true, true, false, false, false, false, false, false};
             //M1, M2, M3, M4, Schieber, Min, Middle, Max
             int[] input = new int[2];
             //Start, Stop
             int fillstand = 0;
+            boolean isActive = false;
+            boolean felsbrockenEinfuellen = false;
+            boolean m3ueberlastet = false;
+
 
             for(int i = 0; i < 10000; i++){
-
                 // Getting Input
                 int readAllDigital = TWUsb.ReadAllDigital();
                 input[0] = readAllDigital & 1;
                 input[1] = readAllDigital & 2;
-                input[2] = readAllDigital & 4;
-                input[3] = readAllDigital & 8;
-                input[4] = readAllDigital & 16;
 
-                // Aktions
-                if(output[4]){
-                    output[2] = true;
-                    output[3] = true;
-                } else {
-                    output[2] = false;
-                    output[3] = false;
-                }
-                if(output[5]){} else {
+                //Initalisation and Force Stop
+                if(input[0] == 1){
+                    isActive = true;
                     output[0] = true;
                     output[1] = true;
-                }
-                if(output[6]){
+                } else if(input[1] == 1){
                     output[0] = false;
                     output[1] = false;
+                    output[2] = false;
+                    output[3] = false;
+                    output[4] = false;
+                }
+
+                // Aktions output: M1, M2, M3, M4, Schieber, Min, Middle, Max
+                if(output[5]){
+                    output[2] = true;
+                    output[3] = true;
+                    //Hier Theoretisch vor dem Öffnen der Klappe kurz verzögerung
+                    output[4] = true;
+                } else {
+                    output[3] = false;
+                    output[4] = false;
+                }
+                if(output[6]){} else {
+                    output[0] = true;
+                    output[1] = true;
+                    felsbrockenEinfuellen = true;
+                }
+                if(output[7]){
+                    output[0] = false;
+                    output[1] = false;
+                    felsbrockenEinfuellen = false;
                 }
                 if(output[7]){
                     output[4] = false;
                     output[2] = false;
                 }
-                if(input[4] > 0){
-                    output[1] = false;
-                    output[2] = false;
-                    output[3] = false;
+                if(m3ueberlastet){
                     output[4] = false;
+                    output[2] = false;
                 }
 
 
 
                 // AktionHandeling
                 // Fillstand
+                if(fillstand == 90){
+                    output[7] = true;
+                }
+                if(fillstand == 45){
+                    output[6] = true;
+                }
+                if(fillstand == 15){
+                    output[6] = true;
+                }
                 if(output[0] && output[1] && fillstand < 100){ // Wenn M1 und M2 laufen und der Füllstand kleiner als 100 Prozent ist
-                    fillstand++;
-                } else if (fillstand == 100){
-                    output[1] = false;
-                    output[2] = false;
+                    fillstand = fillstand +2;
                 }
                 if(output[2] && output[3] && fillstand > 0){
                     fillstand--;
