@@ -46,33 +46,43 @@ public class BrecherAnlage {
              *
              */
 
-            boolean[] output = {true, true, false, false, false, false, false, false};
+            boolean[] output = {false, false, false, false, false, false, false, false};
             //M1, M2, M3, M4, Schieber, Min, Middle, Max
-            int[] input = new int[2];
+            int[] input = new int[3];
             //Start, Stop
             int fillstand = 0;
-            boolean isActive = false;
             boolean felsbrockenEinfuellen = false;
             boolean m3ueberlastet = false;
 
+            boolean isAktive = false;
 
+            boolean goOn = true;
             for(int i = 0; i < 10000; i++){
                 // Getting Input
                 int readAllDigital = TWUsb.ReadAllDigital();
                 input[0] = readAllDigital & 1;
                 input[1] = readAllDigital & 2;
+                input[2] = readAllDigital & 4;
+
 
                 //Initalisation and Force Stop
                 if(input[0] == 1){
-                    isActive = true;
                     output[0] = true;
                     output[1] = true;
-                } else if(input[1] == 1){
+                    output[2] = true;
+                    isAktive = true;
+                }
+                if(input[1] == 2){
                     output[0] = false;
                     output[1] = false;
                     output[2] = false;
                     output[3] = false;
                     output[4] = false;
+                    goOn = false;
+                }
+                if(input[2] == 4){
+                    output[4] = false;
+                    output[2] = false;
                 }
 
                 // Aktions output: M1, M2, M3, M4, Schieber, Min, Middle, Max
@@ -85,43 +95,48 @@ public class BrecherAnlage {
                     output[3] = false;
                     output[4] = false;
                 }
-                if(output[6]){} else {
-                    output[0] = true;
-                    output[1] = true;
-                    felsbrockenEinfuellen = true;
+
+                if(isAktive){
+                    if (!output[6]){
+                        output[0] = true;
+                        output[1] = true;
+                        felsbrockenEinfuellen = true;
+                    }
                 }
                 if(output[7]){
                     output[0] = false;
                     output[1] = false;
                     felsbrockenEinfuellen = false;
                 }
-                if(output[7]){
-                    output[4] = false;
-                    output[2] = false;
-                }
-                if(m3ueberlastet){
-                    output[4] = false;
-                    output[2] = false;
-                }
+
 
 
 
                 // AktionHandeling
                 // Fillstand
-                if(fillstand == 90){
+                if(fillstand > 90){
                     output[7] = true;
+                } else {
+                    output[7] = false;
                 }
-                if(fillstand == 45){
+                if(fillstand > 45){
                     output[6] = true;
+                } else {
+                    output[6] = false;
                 }
-                if(fillstand == 15){
-                    output[6] = true;
+                if(fillstand > 15){
+                    output[5] = true;
+                } else {
+                    output[5] = false;
                 }
                 if(output[0] && output[1] && fillstand < 100){ // Wenn M1 und M2 laufen und der Füllstand kleiner als 100 Prozent ist
                     fillstand = fillstand +2;
                 }
                 if(output[2] && output[3] && fillstand > 0){
                     fillstand--;
+                }
+                if(felsbrockenEinfuellen){
+                    System.out.println("Felsboken sollen eingefüllt werden!");
                 }
 
 
