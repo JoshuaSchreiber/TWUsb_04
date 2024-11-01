@@ -5,6 +5,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static de.wenzlaff.twusb.schnittstelle.TWUsb.ReadAllDigital;
+
 public class MindConnection {
     static Random random = new Random();
 
@@ -18,30 +20,23 @@ public class MindConnection {
 
             // *****************************************************************
 
-            boolean[] output = {false, false, false, false, false, false, false, false};
-            int[] input = new int[5];
-            for(int i = 0; i < 10000; i++){
+            /**
+             * 1 = Send Kanal
+             * 2 = DTR, DSR
+             * 4 = Träger, DCD DCD
+             * 8 = RTS CTS
+             */
 
-                // Getting Input
-                int readAllDigital = TWUsb.ReadAllDigital();
-                input[0] = readAllDigital & 1;
-                input[1] = readAllDigital & 2;
-                input[2] = readAllDigital & 4;
-                input[3] = readAllDigital & 8;
-                input[4] = readAllDigital & 16;
+            senden("!");
 
-                // Aktions
-
-                int sysOutput = 0;
-                for(int l = 0;  l < input.length; l++){
-                    if(input[l] != 0){
-                        sysOutput =   sysOutput + input[l];
-                    }
-                }
-                System.out.println(sysOutput);
-                writeAllDigitalOutput(output);
-                Thread.sleep(500);
+            int i = 0;
+            ArrayList<Integer> data = new ArrayList<>();
+            while (i < 1000000) {
+                data = receiving();
+                i++;
+                Thread.sleep(10);
             }
+            // Hier data Umwandeln und ausgeben
 
             // *****************************************************************
 
@@ -57,23 +52,78 @@ public class MindConnection {
 
     }
 
-    public String senden(int Data) throws TWUsbException, InterruptedException {
-        if(!creatingConnection()) return "Connection Exception"
-
+    public static ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
+        if(!receivingConnection()) return null;
+        ArrayList<Integer> data = new ArrayList<>();
+        if(ReadAllDigital() == 2){
+            data.add(ReadAllDigital());
+        } return data;
     }
 
-    public boolean creatingConnection() throws TWUsbException, InterruptedException {
-        // DTR DSR, DTR DSR
-        // Träger senden Träger empfängen, DCD DCD
-        // RTS CTS, RTS CTS
-        // TxD RxD senden
-        TWUsb.WriteAllDigital(1); // DTR
-        for(int i = 0; i < 10; i++) { // DSR
-            if(TWUsb.ReadAllDigital() == 1) i = 10;
-            else Thread.sleep(10);
-            i++;
-            if(i == 9) return false;
+    public static boolean senden(String data) throws TWUsbException, InterruptedException {
+        if(!creatingConnection()) return false;
+        char[] dataListChar = data.toCharArray();
+        int[] dataListInt = new int[dataListChar.length];
+        String[] dataListString = new String[dataListChar.length];
+        TWUsb.WriteAllDigital(2);
+        for(int i = 0; i < dataListChar.length; i++){
+            dataListInt[i] = (int) dataListChar[i];
+            dataListString[i] = Integer.toBinaryString(dataListInt[i]);
+
+            dataListString[i] =  String.format("%8s", Integer.toBinaryString(dataListInt[i])).replace(' ', '0');
+            oneBitOut(dataListString[i]);
         }
+        TWUsb.WriteAllDigital(3);
+
+        return true;
+    }
+
+
+    public static void oneBitOut(String oneBit) throws TWUsbException {
+        char[] charArray = oneBit.toCharArray();
+        for(int i = 0; i < charArray.length; i++){
+            writeOneBinary(String.valueOf(charArray[i]));
+        }
+    }
+    public static void writeOneBinary(String binary) throws TWUsbException {
+        if(binary.equals("1")) TWUsb.WriteAllDigital(1);
+        else TWUsb.WriteAllDigital(0);
+    }
+
+    public static boolean creatingConnection() throws TWUsbException, InterruptedException {
+        TWUsb.WriteAllDigital(2); // DTR
+        if(!received(2)) return false; // DSR
+
+        TWUsb.WriteAllDigital(4);
+        if(!received(4)) return false;
+
+        TWUsb.WriteAllDigital(8);
+        if(!received(8)) return false;
+
+        return true;
+    }
+
+    public static boolean receivingConnection() throws TWUsbException, InterruptedException {
+        if(!received(2)) return false; // DSR
+        TWUsb.WriteAllDigital(2); // DTR
+
+        if(!received(4)) return false;
+        TWUsb.WriteAllDigital(4);
+
+        if(!received(8)) return false;
+        TWUsb.WriteAllDigital(8);
+
+        return true;
+    }
+
+    public static boolean received(int expected) throws TWUsbException, InterruptedException {
+        int failCounter = 0;
+        while(ReadAllDigital() != expected){
+            Thread.sleep(1);
+            failCounter++;
+            if(failCounter == 100) return false;
+        }
+        return true;
     }
 
     public static void writeAllDigitalOutput(boolean[] output) throws TWUsbException {
