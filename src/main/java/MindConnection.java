@@ -46,6 +46,35 @@ public class MindConnection {
 
     }
 
+    public static String dataToString(ArrayList<Integer> data){
+        String stringData = "";
+        for(int i = 0; i < data.size(); i++){
+            stringData = stringData + data.get(i);
+        }
+        return binaryToAscii(stringData);
+    }
+
+
+    public static String binaryToAscii(String binaryString) {
+        StringBuilder asciiString = new StringBuilder();
+        // Zerlege den Binär-String in 8-Bit-Blöcke
+        for (int i = 0; i < binaryString.length(); i += 8) {
+            String byteString = binaryString.substring(i, i + 8); // Nimm 8-Bit-Abschnitt
+            // Konvertiere den 8-Bit-Abschnitt in eine Dezimalzahl
+            int asciiCode = Integer.parseInt(byteString, 2);
+            // Konvertiere den ASCII-Code in das entsprechende Zeichen
+            asciiString.append((char) asciiCode);
+        }
+        return asciiString.toString();
+    }
+
+    public static void main(String[] args) {
+        String binaryInput = "0100100001100101011011000110110001101111"; // Beispiel: "Hello"
+        String result = binaryToAscii(binaryInput);
+        System.out.println("ASCII-String: " + result); // Erwartete Ausgabe: "Hello"
+    }
+
+
     public static ArrayList<Integer> waitingOnReceiving() throws TWUsbException, InterruptedException {
         int i = 0;
         ArrayList<Integer> data = new ArrayList<>();
@@ -79,6 +108,9 @@ public class MindConnection {
                     }
                 }
             }
+        }
+        while (data.get(0) == 2){
+            data.remove(0);
         }
         System.out.println("Gotten data: " + data);
         return data;
