@@ -27,15 +27,9 @@ public class MindConnection {
              * 8 = RTS CTS
              */
 
-            senden("!");
+            senden("Hello World!");
 
-            int i = 0;
-            ArrayList<Integer> data = new ArrayList<>();
-            while (i < 1000000) {
-                data = receiving();
-                i++;
-                Thread.sleep(10);
-            }
+
             // Hier data Umwandeln und ausgeben
 
             // *****************************************************************
@@ -52,12 +46,29 @@ public class MindConnection {
 
     }
 
+    public static ArrayList<Integer> waitingOnReceiving() throws TWUsbException, InterruptedException {
+        int i = 0;
+        ArrayList<Integer> data = new ArrayList<>();
+        boolean received = false;
+        while (!received) {
+            data = receiving();
+            if(data != null){
+                received = true;
+            }
+            i++;
+            Thread.sleep(10);
+        }
+        return data;
+    }
     public static ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
         if(!receivingConnection()) return null;
         ArrayList<Integer> data = new ArrayList<>();
         if(ReadAllDigital() == 2){
-            data.add(ReadAllDigital());
-        } return data;
+            while(ReadAllDigital() != 0){
+                data.add(ReadAllDigital());
+            }
+        }
+        return data;
     }
 
     public static boolean senden(String data) throws TWUsbException, InterruptedException {
