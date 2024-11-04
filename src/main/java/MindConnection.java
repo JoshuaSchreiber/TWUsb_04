@@ -63,19 +63,20 @@ public class MindConnection {
     }
     public static ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
         if(!receivingConnection()) return null;
-        System.out.println("        => Connection Complete");
         ArrayList<Integer> data = new ArrayList<>();
         boolean stop = false;
-        if(ReadAllDigital() == 2){
+        if(received(2)){
             System.out.println("Gotten 01 as Transition Start");
             while(!stop){
                 data.add(ReadAllDigital());
-                if( data.get(data.size() - 8) == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
-                    for(int i = 0; i < 8; i++){
-                        data.remove(data.size() - 1);
+                if(data.size() > 8){
+                    if( data.get(data.size() - 8) == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
+                        for(int i = 0; i < 8; i++){
+                            data.remove(data.size() - 1);
+                        }
+                        System.out.println("Gotten transition end 11");
+                        stop = true;
                     }
-                    System.out.println("Gotten transition end 11");
-                    stop = true;
                 }
             }
         }
@@ -182,6 +183,7 @@ public class MindConnection {
         }
         return true;
     }
+
 
     public static void writeAllDigitalOutput(boolean[] output) throws TWUsbException {
         int worth = 0;
