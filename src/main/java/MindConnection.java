@@ -10,6 +10,8 @@ import static de.wenzlaff.twusb.schnittstelle.TWUsb.ReadAllDigital;
 public class MindConnection {
     static Random random = new Random();
 
+    static boolean toggle = true;
+
     public static void main(String[] args) {
         try {
             TWUsb.OpenDevice(TWUsb.ADDRESSE_0);
@@ -55,6 +57,7 @@ public class MindConnection {
     }
 
 
+
     public static String binaryToAscii(String binaryString) {
         StringBuilder asciiString = new StringBuilder();
         // Zerlege den Binär-String in 8-Bit-Blöcke
@@ -67,6 +70,7 @@ public class MindConnection {
         }
         return asciiString.toString();
     }
+
 
 
 
@@ -93,7 +97,7 @@ public class MindConnection {
         if(received(2)){
             System.out.println("Gotten 01 as Transition Start");
             while(!stop){
-                data.add(ReadAllDigital());
+                data.add(received());
                 if(data.size() > 8){
                     if( data.get(data.size() - 8) == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
                         for(int i = 0; i < 8; i++){
@@ -122,6 +126,7 @@ public class MindConnection {
         System.out.println("        => Giving Data Go (Value2)");
         TWUsb.WriteAllDigital(2);
 
+
         String completeData = "";
         for(int i = 0; i < dataListChar.length; i++){
             dataListInt[i] = (int) dataListChar[i];
@@ -131,22 +136,33 @@ public class MindConnection {
             completeData = completeData + dataListString[i];
         }
         System.out.println("Complete Data: " + completeData);
+
+
+        boolean toggle = false;
         char[] completeDataChar = completeData.toCharArray();
         for(int i = 0; i < completeDataChar.length; i++){
-            writeOneBinary(completeDataChar[i]);
+            writeOneBinary(completeDataChar[i], toggle);
+            toggle = !toggle;
         }
 
         System.out.println();
 
         System.out.println("        => Transmition complete");
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('1');
-        writeOneBinary('1');
+        writeOneBinary('0', toggle);
+        toggle = !toggle;
+        writeOneBinary('0', toggle);
+        toggle = !toggle;
+        writeOneBinary('0', toggle);
+        toggle = !toggle;
+        writeOneBinary('0', toggle);
+        toggle = !toggle;
+        writeOneBinary('0', toggle);
+        toggle = !toggle;
+        writeOneBinary('0', toggle);
+        toggle = !toggle;
+        writeOneBinary('1', toggle);
+        toggle = !toggle;
+        writeOneBinary('1', toggle);
         System.out.println("Written Transmittion End");
 
         return true;
@@ -154,9 +170,15 @@ public class MindConnection {
 
 
 
-    public static void writeOneBinary(Character binary) throws TWUsbException {
-        if(binary.equals('1')) TWUsb.WriteAllDigital(1);
-        else TWUsb.WriteAllDigital(0);
+    public static void writeOneBinary(Character binary, boolean toggle) throws TWUsbException {
+        if(!toggle){
+            if(binary.equals('1')) TWUsb.WriteAllDigital(1);
+            else TWUsb.WriteAllDigital(0);
+        } else {
+            if(binary.equals('1')) TWUsb.WriteAllDigital(1+4);
+            else TWUsb.WriteAllDigital(0+4);
+        }
+
         System.out.print("Written:" + binary + " ");
     }
 
@@ -205,11 +227,23 @@ public class MindConnection {
     public static boolean received(int expected) throws TWUsbException, InterruptedException {
         int failCounter = 0;
         while(ReadAllDigital() != expected){
-            Thread.sleep(1);
+            Thread.sleep(0,1);
             failCounter++;
             if(failCounter == 100) return false;
         }
         return true;
+    }
+
+    public static int received() throws TWUsbException, InterruptedException {
+        int incoming = TWUsb.ReadAllDigital();
+        boolean localToggle;
+        if((incoming & 4) == 4) localToggle = true;
+        else localToggle = false;
+        if(localToggle != toggle){
+            incoming = TWUsb.ReadAllDigital();
+        }
+        toggle = localToggle;
+        return incoming & 1;
     }
 
 
