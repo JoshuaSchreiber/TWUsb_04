@@ -99,6 +99,7 @@ public class MindConnection {
             while(!stop){
                 data.add(received());
                 if(data.size() > 8){
+                    System.out.println(dataToString(data));
                     if( data.get(data.size() - 8) == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
                         for(int i = 0; i < 8; i++){
                             data.remove(data.size() - 1);
@@ -142,26 +143,27 @@ public class MindConnection {
         char[] completeDataChar = completeData.toCharArray();
         for(int i = 0; i < completeDataChar.length; i++){
             writeOneBinary(completeDataChar[i], toggle);
-            changeToggle(toggle);
+            toggle = changeToggle(toggle);
         }
 
         System.out.println();
 
         System.out.println("        => Transmition complete");
+
         writeOneBinary('0', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('0', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('0', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('0', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('0', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('0', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('1', toggle);
-        changeToggle(toggle);
+        toggle = changeToggle(toggle);
         writeOneBinary('1', toggle);
         System.out.println("Written Transmittion End");
 
@@ -176,10 +178,11 @@ public class MindConnection {
 
 
 
-    public static void writeOneBinary(Character binary, int toggle) throws TWUsbException {
+    public static void writeOneBinary(Character binary, int toggle) throws TWUsbException, InterruptedException {
 
         if(binary.equals('1')) TWUsb.WriteAllDigital(1+toggle);
         else TWUsb.WriteAllDigital(0+toggle);
+        Thread.sleep(0,10);
 
 
         System.out.print("Written:" + binary + " ");
