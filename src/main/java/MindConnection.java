@@ -10,7 +10,7 @@ import static de.wenzlaff.twusb.schnittstelle.TWUsb.ReadAllDigital;
 public class MindConnection {
     static Random random = new Random();
 
-    static boolean toggle = true;
+    static int toggle = 0;
 
     public static void main(String[] args) {
         try {
@@ -138,46 +138,49 @@ public class MindConnection {
         System.out.println("Complete Data: " + completeData);
 
 
-        boolean toggle = false;
+        int toggle = 4;
         char[] completeDataChar = completeData.toCharArray();
         for(int i = 0; i < completeDataChar.length; i++){
             writeOneBinary(completeDataChar[i], toggle);
-            toggle = !toggle;
+            changeToggle(toggle);
         }
 
         System.out.println();
 
         System.out.println("        => Transmition complete");
         writeOneBinary('0', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('0', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('0', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('0', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('0', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('0', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('1', toggle);
-        toggle = !toggle;
+        changeToggle(toggle);
         writeOneBinary('1', toggle);
         System.out.println("Written Transmittion End");
 
         return true;
     }
 
+    public static int changeToggle(int toggle){
+        if(toggle == 0) toggle = 4;
+        else toggle = 0;
+        return toggle;
+    }
 
 
-    public static void writeOneBinary(Character binary, boolean toggle) throws TWUsbException {
-        if(!toggle){
-            if(binary.equals('1')) TWUsb.WriteAllDigital(1);
-            else TWUsb.WriteAllDigital(0);
-        } else {
-            if(binary.equals('1')) TWUsb.WriteAllDigital(1+4);
-            else TWUsb.WriteAllDigital(0+4);
-        }
+
+    public static void writeOneBinary(Character binary, int toggle) throws TWUsbException {
+
+        if(binary.equals('1')) TWUsb.WriteAllDigital(1+toggle);
+        else TWUsb.WriteAllDigital(0+toggle);
+
 
         System.out.print("Written:" + binary + " ");
     }
@@ -236,12 +239,14 @@ public class MindConnection {
 
     public static int received() throws TWUsbException, InterruptedException {
         int incoming = TWUsb.ReadAllDigital();
-        boolean localToggle;
-        if((incoming & 4) == 4) localToggle = true;
-        else localToggle = false;
-        if(localToggle != toggle){
+        int localToggle;
+        if((incoming & 4) == 4) localToggle = 4;
+        else localToggle = 0;
+        while (localToggle == toggle){
             incoming = TWUsb.ReadAllDigital();
+            localToggle = incoming & 4;
         }
+        incoming = TWUsb.ReadAllDigital();
         toggle = localToggle;
         return incoming & 1;
     }
