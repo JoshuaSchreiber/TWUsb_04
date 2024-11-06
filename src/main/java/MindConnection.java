@@ -68,11 +68,7 @@ public class MindConnection {
         return asciiString.toString();
     }
 
-    public static void main(String[] args) {
-        String binaryInput = "0100100001100101011011000110110001101111"; // Beispiel: "Hello"
-        String result = binaryToAscii(binaryInput);
-        System.out.println("ASCII-String: " + result); // Erwartete Ausgabe: "Hello"
-    }
+
 
 
     public static ArrayList<Integer> waitingOnReceiving() throws TWUsbException, InterruptedException {
