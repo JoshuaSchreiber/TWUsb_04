@@ -11,46 +11,16 @@ import java.nio.file.Files;
 import java.io.File;
 
 public class MindConnection {
-    static Random random = new Random();
+    public Random random = new Random();
 
-    static int toggle = 0;
+    public int toggle = 0;
 
-    public static void main(String[] args) {
-        try {
-            TWUsb.OpenDevice(TWUsb.ADDRESSE_0);
-            TWUsb.ClearAllDigital();
-            Thread.sleep(100);
-            TWUsb.ClearAllAnalog();
-            Thread.sleep(100);
-
-            // *****************************************************************
-
-            System.out.println("Start");
-            Empfangen empfangen = new Empfangen();
-            empfangen.start();
-            Senden senden = new Senden();
-            senden.start();
-            for(int i = 0; i < 10000; i++){
-                Thread.sleep(100);
-            }
-
-            // Hier data Umwandeln und ausgeben
-
-            // *****************************************************************
-
-            TWUsb.CloseDevice();
-
-        } catch (TWUsbException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public MindConnection() {
 
     }
 
-    public static String dataToString(ArrayList<Integer> data){
+
+    public String dataToString(ArrayList<Integer> data){
         String stringData = "";
         for(int i = 0; i < data.size(); i++){
             stringData = stringData + data.get(i);
@@ -60,7 +30,7 @@ public class MindConnection {
 
 
 
-    public static String binaryToAscii(String binaryString) {
+    public String binaryToAscii(String binaryString) {
         StringBuilder asciiString = new StringBuilder();
         // Zerlege den Binär-String in 8-Bit-Blöcke
         for (int i = 0; i < binaryString.length(); i += 8) {
@@ -77,8 +47,7 @@ public class MindConnection {
 
 
 
-    public static ArrayList<Integer> waitingOnReceiving() throws TWUsbException, InterruptedException {
-        int i = 0;
+    public ArrayList<Integer> waitingOnReceiving() throws TWUsbException, InterruptedException {
         ArrayList<Integer> data = new ArrayList<>();
         boolean received = false;
         while (!received) {
@@ -86,12 +55,12 @@ public class MindConnection {
             if(data != null){
                 received = true;
             }
-            i++;
+
             Thread.sleep(10);
         }
         return data;
     }
-    public static ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
+    public ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
         if(!receivingConnection()) return null;
         ArrayList<Integer> data = new ArrayList<>();
         boolean stop = false;
@@ -115,7 +84,7 @@ public class MindConnection {
         return data;
     }
 
-    public static boolean senden(String data) throws TWUsbException, InterruptedException {
+    public boolean senden(String data) throws TWUsbException, InterruptedException {
         if(!creatingConnection()) return false;
         char[] dataListChar = data.toCharArray();
         int[] dataListInt = new int[dataListChar.length];
@@ -164,7 +133,7 @@ public class MindConnection {
         return true;
     }
 
-    public static int changeToggle(int toggle){
+    public int changeToggle(int toggle){
         if(toggle == 0) toggle = 4;
         else toggle = 0;
         return toggle;
@@ -172,7 +141,7 @@ public class MindConnection {
 
 
 
-    public static void writeOneBinary(Character binary, int toggle) throws TWUsbException, InterruptedException {
+    public void writeOneBinary(Character binary, int toggle) throws TWUsbException, InterruptedException {
 
         if(binary.equals('1')) TWUsb.WriteAllDigital(1+toggle);
         else TWUsb.WriteAllDigital(0+toggle);
@@ -181,7 +150,7 @@ public class MindConnection {
 
     }
 
-    public static boolean creatingConnection() throws TWUsbException, InterruptedException {
+    public boolean creatingConnection() throws TWUsbException, InterruptedException {
         TWUsb.WriteAllDigital(2); // DTR
         if(!received(2)) return false; // DSR
 
@@ -194,7 +163,7 @@ public class MindConnection {
         return true;
     }
 
-    public static boolean receivingConnection() throws TWUsbException, InterruptedException {
+    public boolean receivingConnection() throws TWUsbException, InterruptedException {
         if(!received(2)) return false; // DSR
         TWUsb.WriteAllDigital(2); // DTR
 
@@ -207,7 +176,7 @@ public class MindConnection {
         return true;
     }
 
-    public static boolean received(int expected) throws TWUsbException, InterruptedException {
+    public boolean received(int expected) throws TWUsbException, InterruptedException {
         int failCounter = 0;
         while(ReadAllDigital() != expected){
             Thread.sleep(0,1);
@@ -217,7 +186,7 @@ public class MindConnection {
         return true;
     }
 
-    public static int received() throws TWUsbException, InterruptedException {
+    public int received() throws TWUsbException, InterruptedException {
         int incoming = TWUsb.ReadAllDigital();
         int localToggle;
         if((incoming & 4) == 4) localToggle = 4;
@@ -232,7 +201,7 @@ public class MindConnection {
     }
 
 
-    public static void writeAllDigitalOutput(boolean[] output) throws TWUsbException {
+    public void writeAllDigitalOutput(boolean[] output) throws TWUsbException {
         int worth = 0;
         for (int i = 0; i < output.length; i++) {
             if (output[i]) {
@@ -243,11 +212,11 @@ public class MindConnection {
         TWUsb.WriteAllDigital(worth);
     }
 
-    public static int newLowerHole(){
+    public  int newLowerHole(){
         return random.nextInt(70)+1;
 
     }
-    public static int newHigherHole(){
+    public int newHigherHole(){
         return random.nextInt(30)+1 + 70;
     }
 }

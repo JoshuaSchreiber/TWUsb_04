@@ -4,22 +4,17 @@ import java.util.Scanner;
 
 public class Senden extends Thread {
     public String sendData = "";
+    public MindConnection sendConnection = new MindConnection();
     @Override
     public void run() {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String data = scanner.nextLine();
-            System.out.println(data);
             sendData = data;
             try {
-                MindConnection.senden(sendData);
+                sendConnection.senden(sendData);
             } catch (TWUsbException e) {
                 throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                Thread.sleep(1);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
