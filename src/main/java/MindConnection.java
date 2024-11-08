@@ -29,7 +29,7 @@ public class MindConnection {
              * 8 = RTS CTS
              */
 
-            senden("Hello World!");
+            senden(" r");
 
 
             // Hier data Umwandeln und ausgeben
@@ -100,7 +100,7 @@ public class MindConnection {
                 data.add(received());
                 if(data.size() > 8){
                     System.out.println(dataToString(data));
-                    if( data.get(data.size() - 8) == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
+                    if( data.size() % 8 == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
                         for(int i = 0; i < 8; i++){
                             data.remove(data.size() - 1);
                         }
