@@ -81,7 +81,7 @@ public class MainWindow extends Window {
             if(i % 2 == 0){
                 side = 1;
             } else  side = 2;
-            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 500, 100, 70,true, side,i,1, 1, 5,5,5,5));
+            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 500, 100, 70,true, side,i,1, 2, 5,5,5,5));
             gridBagLayout.setConstraints(monitor.get(i-1), monitor.get(i-1).getCustomJElementInGridBagSystem().getGridBagConstraints());
             monitor.get(i-1).setText("");
             this.add(monitor.get(i-1));
@@ -96,7 +96,7 @@ public class MainWindow extends Window {
         sendTextField = input;
 
 
-        CustomJButtonInGridBagSystem senden = new CustomJButtonInGridBagSystem("#04E6E6", "#000000", 50, 50,20, true, 3, 5, 1,2, 100,5,5,5);
+        CustomJButtonInGridBagSystem senden = new CustomJButtonInGridBagSystem("#04E6E6", "#000000", 50, 50,20, true, 3, 5, 1,1, 100,5,5,5);
         senden.setText("Sent");
         senden.addActionListener(new ActionListener() {
             @Override
