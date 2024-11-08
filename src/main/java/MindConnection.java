@@ -121,15 +121,11 @@ public class MindConnection {
         int[] dataListInt = new int[dataListChar.length];
         String[] dataListString = new String[dataListChar.length];
 
+        for(int i = 0; i < 10; i++){
+            TWUsb.WriteAllDigital(2);
+            Thread.sleep(0,1);
+        }
 
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('0');
-        writeOneBinary('1');
-        writeOneBinary('1');
 
 
         String completeData = "";
@@ -180,14 +176,6 @@ public class MindConnection {
 
         if(binary.equals('1')) TWUsb.WriteAllDigital(1+toggle);
         else TWUsb.WriteAllDigital(0+toggle);
-        Thread.sleep(0,10);
-
-
-    }
-    public static void writeOneBinary(Character binary) throws TWUsbException, InterruptedException {
-
-        if(binary.equals('1')) TWUsb.WriteAllDigital(1);
-        else TWUsb.WriteAllDigital(0);
         Thread.sleep(0,10);
 
 
