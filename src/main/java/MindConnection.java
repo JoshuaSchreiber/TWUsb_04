@@ -25,10 +25,11 @@ public class MindConnection {
 
             // *****************************************************************
 
+            System.out.println("Start");
             Empfangen empfangen = new Empfangen();
             empfangen.start();
-            Senden senden = new Senden();
-            senden.start();
+            // Senden senden = new Senden();
+            // senden.start();
             for(int i = 0; i < 10000; i++){
                 Thread.sleep(100);
             }
@@ -106,6 +107,7 @@ public class MindConnection {
                     }
                 }
             }
+
         }
         while (data.get(0) == 2){
             data.remove(0);

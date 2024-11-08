@@ -16,10 +16,9 @@ public class Empfangen extends Thread {
                 throw new RuntimeException(e);
             }
             String dataString = MindConnection.dataToString(data);
-            if(dataString != gottenData) {
-                gottenData = dataString;
-                System.out.println(gottenData);
-            }
+
+            gottenData = dataString;
+            System.out.println(gottenData);
         }
     }
 

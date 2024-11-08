@@ -9,6 +9,7 @@ public class Senden extends Thread {
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String data = scanner.nextLine();
+            System.out.println(data);
             sendData = data;
             try {
                 MindConnection.senden(sendData);
