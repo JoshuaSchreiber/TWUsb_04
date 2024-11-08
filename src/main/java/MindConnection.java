@@ -88,7 +88,6 @@ public class MindConnection {
             i++;
             Thread.sleep(10);
         }
-        System.out.println("Left Loop");
         return data;
     }
     public static ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
@@ -96,7 +95,6 @@ public class MindConnection {
         ArrayList<Integer> data = new ArrayList<>();
         boolean stop = false;
         if(received(2)){
-            System.out.println("Gotten 01 as Transition Start");
             while(!stop){
                 data.add(received());
                 if(data.size() > 8){
@@ -104,7 +102,6 @@ public class MindConnection {
                         for(int i = 0; i < 8; i++){
                             data.remove(data.size() - 1);
                         }
-                        System.out.println("Gotten transition end 11");
                         stop = true;
                     }
                 }
@@ -113,18 +110,15 @@ public class MindConnection {
         while (data.get(0) == 2){
             data.remove(0);
         }
-        System.out.println("Gotten data: " + data);
         return data;
     }
 
     public static boolean senden(String data) throws TWUsbException, InterruptedException {
         if(!creatingConnection()) return false;
-        System.out.println("        => Transmitting Data");
         char[] dataListChar = data.toCharArray();
         int[] dataListInt = new int[dataListChar.length];
         String[] dataListString = new String[dataListChar.length];
 
-        System.out.println("        => Giving Data Go (Value2)");
         TWUsb.WriteAllDigital(2);
 
 
@@ -136,7 +130,6 @@ public class MindConnection {
             dataListString[i] =  String.format("%8s", Integer.toBinaryString(dataListInt[i])).replace(' ', '0');
             completeData = completeData + dataListString[i];
         }
-        System.out.println("Complete Data: " + completeData);
 
 
         int toggle = 4;
@@ -146,9 +139,6 @@ public class MindConnection {
             toggle = changeToggle(toggle);
         }
 
-        System.out.println();
-
-        System.out.println("        => Transmition complete");
 
         writeOneBinary('0', toggle);
         toggle = changeToggle(toggle);
@@ -165,7 +155,6 @@ public class MindConnection {
         writeOneBinary('1', toggle);
         toggle = changeToggle(toggle);
         writeOneBinary('1', toggle);
-        System.out.println("Written Transmittion End");
 
         return true;
     }
@@ -185,47 +174,31 @@ public class MindConnection {
         Thread.sleep(0,10);
 
 
-        System.out.print("Written:" + binary + " ");
     }
 
     public static boolean creatingConnection() throws TWUsbException, InterruptedException {
-        System.out.println("        => Creating Connection");
         TWUsb.WriteAllDigital(2); // DTR
-        System.out.println("Sent DTR");
         if(!received(2)) return false; // DSR
-        System.out.println("Received DSR");
 
         TWUsb.WriteAllDigital(4);
-        System.out.println("Sent DCD");
         if(!received(4)) return false;
-        System.out.println("Received Träger");
 
         TWUsb.WriteAllDigital(8);
-        System.out.println("Sent CTS");
         if(!received(8)) return false;
-        System.out.println("Received RTS");
 
-        System.out.println("        => Connection Complete");
         return true;
     }
 
     public static boolean receivingConnection() throws TWUsbException, InterruptedException {
         if(!received(2)) return false; // DSR
-        System.out.println("Received DSR");
         TWUsb.WriteAllDigital(2); // DTR
-        System.out.println("Sent DTR");
 
         if(!received(4)) return false;
-        System.out.println("Received Träger");
         TWUsb.WriteAllDigital(4);
-        System.out.println("Sent DCD");
 
         if(!received(8)) return false;
-        System.out.println("Received RTS");
         TWUsb.WriteAllDigital(8);
-        System.out.println("Sent CTS");
 
-        System.out.println("        => Connection Complete");
         return true;
     }
 
