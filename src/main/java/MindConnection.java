@@ -99,7 +99,6 @@ public class MindConnection {
             while(!stop){
                 data.add(received());
                 if(data.size() > 8){
-                    System.out.println(dataToString(data));
                     if( data.size() % 8 == 0 && data.get(data.size() - 7) == 0 && data.get(data.size() - 6) == 0 && data.get(data.size() - 5) == 0 && data.get(data.size() - 4) == 0 && data.get(data.size() - 3) == 0 && data.get(data.size() - 1) == 1 && data.get(data.size() - 2) == 1){
                         for(int i = 0; i < 8; i++){
                             data.remove(data.size() - 1);
@@ -210,7 +209,6 @@ public class MindConnection {
     }
 
     public static boolean receivingConnection() throws TWUsbException, InterruptedException {
-        System.out.println("        => Receiving Connection");
         if(!received(2)) return false; // DSR
         System.out.println("Received DSR");
         TWUsb.WriteAllDigital(2); // DTR
