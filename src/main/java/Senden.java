@@ -16,21 +16,15 @@ public class Senden extends Thread {
             for (char c : data.toCharArray()) {
                 chars.add(c);
             }
-            if(chars.get(0) == 'W' && chars.get(1) == 'r' && chars.get(2) == 'i' &&chars.get(3) == 't' && chars.get(4) == 'e' && chars.get(5) == ':'){
-                data = "";
-                for(int i = 6; i < chars.size(); i++){
-                    data += chars.get(i);
-                }
-                sendData = data;
-                try {
-                    sendConnection.senden(sendData);
-                } catch (TWUsbException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
 
+            sendData = data;
+            try {
+                sendConnection.senden(sendData);
+            } catch (TWUsbException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

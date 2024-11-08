@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Empfangen extends Thread {
     private String gottenData = "";
     public MindConnection receivingConnection = new MindConnection();
+
     @Override
     public void run() {
         while (true) {

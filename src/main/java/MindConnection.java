@@ -61,7 +61,7 @@ public class MindConnection {
         return data;
     }
     public ArrayList<Integer>  receiving() throws TWUsbException, InterruptedException {
-        if(!receivingConnection()) return null;
+        if((!receivingConnection())) return null;
         ArrayList<Integer> data = new ArrayList<>();
         boolean stop = false;
         if(received(2)){
@@ -151,7 +151,7 @@ public class MindConnection {
     }
 
     public boolean creatingConnection() throws TWUsbException, InterruptedException {
-        TWUsb.WriteAllDigital(2); // DTR
+        TWUsb.WriteAllDigital(31); // DTR
         if(!received(2)) return false; // DSR
 
         TWUsb.WriteAllDigital(4);
@@ -164,7 +164,7 @@ public class MindConnection {
     }
 
     public boolean receivingConnection() throws TWUsbException, InterruptedException {
-        if(!received(2)) return false; // DSR
+        if(!received(31)) return false; // DSR
         TWUsb.WriteAllDigital(2); // DTR
 
         if(!received(4)) return false;
