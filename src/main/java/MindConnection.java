@@ -1,11 +1,14 @@
 import de.wenzlaff.twusb.schnittstelle.TWUsb;
 import de.wenzlaff.twusb.schnittstelle.exception.TWUsbException;
 
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Random;
 
 import static de.wenzlaff.twusb.schnittstelle.TWUsb.ReadAllDigital;
+import java.nio.file.Files;
+import java.io.File;
 
 public class MindConnection {
     static Random random = new Random();
@@ -22,15 +25,13 @@ public class MindConnection {
 
             // *****************************************************************
 
-            /**
-             * 1 = Send Kanal
-             * 2 = DTR, DSR
-             * 4 = Träger, DCD DCD
-             * 8 = RTS CTS
-             */
-
-            senden(" r");
-
+            Empfangen empfangen = new Empfangen();
+            empfangen.start();
+            Senden senden = new Senden();
+            senden.start();
+            for(int i = 0; i < 10000; i++){
+                Thread.sleep(100);
+            }
 
             // Hier data Umwandeln und ausgeben
 
