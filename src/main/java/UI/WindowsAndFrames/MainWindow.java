@@ -40,11 +40,11 @@ public class MainWindow extends Window {
 
 
 
-        createChat(sendTextField, monitor.get(0));
+        createChat(sendTextField);
 
     }
 
-    private void createChat(CustomJTextFieldInGridBagSystem customJTextFieldInGridBagSystem, CustomJLabelInGridBagSystem customJLabelInGridBagSystem) {
+    private void createChat(CustomJTextFieldInGridBagSystem customJTextFieldInGridBagSystem) {
         try {
             TWUsb.OpenDevice(TWUsb.ADDRESSE_0);
             TWUsb.ClearAllDigital();
@@ -57,10 +57,10 @@ public class MainWindow extends Window {
             System.out.println("Start");
 
 
-            Senden senden  = new Senden(customJTextFieldInGridBagSystem, this);
+            Senden senden  = new Senden(customJTextFieldInGridBagSystem, this, monitor, send);
             senden.start();
 
-            Empfangen empfangen = new Empfangen(customJLabelInGridBagSystem);
+            Empfangen empfangen = new Empfangen(monitor);
             empfangen.start();
 
 
@@ -81,7 +81,7 @@ public class MainWindow extends Window {
             if(i % 2 == 0){
                 side = 1;
             } else  side = 2;
-            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 700, 100, 70,true, side,i,1, 1, 5,5,5,5));
+            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 500, 100, 70,true, side,i,1, 1, 5,5,5,5));
             gridBagLayout.setConstraints(monitor.get(i-1), monitor.get(i-1).getCustomJElementInGridBagSystem().getGridBagConstraints());
             monitor.get(i-1).setText("");
             this.add(monitor.get(i-1));
@@ -89,7 +89,7 @@ public class MainWindow extends Window {
 
 
 
-        CustomJTextFieldInGridBagSystem input = new CustomJTextFieldInGridBagSystem(true,"#04E6E6", "#000000", 700, 100,50, true, 1, 5, 1,2, 100,5,350,350);
+        CustomJTextFieldInGridBagSystem input = new CustomJTextFieldInGridBagSystem(true,"#04E6E6", "#000000", 500, 100,50, true, 1, 5, 1,2, 100,5,350,350);
         input.setText("Sent");
         gridBagLayout.setConstraints(input, input.getCustomJElementInGridBagSystem().getGridBagConstraints());
         this.add(input);

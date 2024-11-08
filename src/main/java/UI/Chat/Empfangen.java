@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class Empfangen extends Thread {
     private String gottenData = "";
     public MindConnection receivingConnection = new MindConnection();
-    CustomJLabelInGridBagSystem customJLabelInGridBagSystem;
+    ArrayList<CustomJLabelInGridBagSystem> customJLabelInGridBagSystem;
 
-    public Empfangen(CustomJLabelInGridBagSystem customJLabelInGridBagSystem) {
+    public Empfangen(ArrayList<CustomJLabelInGridBagSystem> customJLabelInGridBagSystem) {
         this.customJLabelInGridBagSystem = customJLabelInGridBagSystem;
     }
     @Override
@@ -27,7 +27,8 @@ public class Empfangen extends Thread {
             String dataString = receivingConnection.dataToString(data);
 
             gottenData = dataString;
-            customJLabelInGridBagSystem.setText(gottenData);
+            customJLabelInGridBagSystem.get(2).setText(customJLabelInGridBagSystem.get(0).getText());
+            customJLabelInGridBagSystem.get(0).setText(gottenData);
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {
