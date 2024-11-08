@@ -133,7 +133,6 @@ public class MindConnection {
             completeData = completeData + dataListString[i];
         }
 
-
         int toggle = 4;
         char[] completeDataChar = completeData.toCharArray();
         for(int i = 0; i < completeDataChar.length; i++){

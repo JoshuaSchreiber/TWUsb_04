@@ -18,6 +18,11 @@ public class Senden extends Thread {
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }

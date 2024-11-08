@@ -19,6 +19,11 @@ public class Empfangen extends Thread {
 
             gottenData = dataString;
             System.out.println(gottenData);
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
