@@ -1,6 +1,7 @@
 package UI.WindowsAndFrames;
 
-import Handler.JMenuItemHandler;
+
+import UI.Handler.JMenuItemHandler;
 
 import javax.swing.*;
 import java.awt.*;

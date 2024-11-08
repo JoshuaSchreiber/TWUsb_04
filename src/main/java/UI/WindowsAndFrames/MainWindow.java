@@ -1,7 +1,14 @@
 package UI.WindowsAndFrames;
 
-import CustomJElements.CustomJButtonInGridBagSystem;
-import CustomJElements.CustomJLabelInGridBagSystem;
+
+
+import UI.Chat.Empfangen;
+import UI.Chat.Senden;
+import UI.CustomJElements.CustomJButtonInGridBagSystem;
+import UI.CustomJElements.CustomJLabelInGridBagSystem;
+import UI.CustomJElements.CustomJTextFieldInGridBagSystem;
+import de.wenzlaff.twusb.schnittstelle.TWUsb;
+import de.wenzlaff.twusb.schnittstelle.exception.TWUsbException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,77 +18,111 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+
 public class MainWindow extends Window {
     private GridBagLayout gridBagLayout;
-    private GridBagConstraints gridBagConstraints = new GridBagConstraints();
-    private JFrame jFrame;
-    private int size = 4;
-    int counter = 0;
+    private CustomJButtonInGridBagSystem sendButton;
+    private CustomJTextFieldInGridBagSystem sendTextField;
 
-    int oldRandom = 0;
+    ArrayList<CustomJLabelInGridBagSystem> monitor = new ArrayList<>();
 
-    ArrayList<String> getranke;
+    private boolean send = false;
 
-    CustomJLabelInGridBagSystem monitor;
-
-    public MainWindow(JFrame jFrame, ArrayList<String> getraenke) throws HeadlessException, IOException {
+    public MainWindow(JFrame jFrame) throws HeadlessException, IOException, InterruptedException {
         super(jFrame);
-        this.jFrame = jFrame;
-        this.getranke = getraenke;
         jFrame.add(this);
 
         gridBagLayout = new GridBagLayout();
         this.setLayout(gridBagLayout);
 
-        addElements(getraenke);
-
+        addElements();
         setVisible(true);
+
+
+
+        createChat(sendTextField, monitor.get(0));
+
     }
 
-    private void addElements(ArrayList<String> getraenke) {
+    private void createChat(CustomJTextFieldInGridBagSystem customJTextFieldInGridBagSystem, CustomJLabelInGridBagSystem customJLabelInGridBagSystem) {
+        try {
+            TWUsb.OpenDevice(TWUsb.ADDRESSE_0);
+            TWUsb.ClearAllDigital();
+            Thread.sleep(100);
+            TWUsb.ClearAllAnalog();
+            Thread.sleep(100);
+
+            // *****************************************************************
+
+            System.out.println("Start");
+
+
+            Senden senden  = new Senden(customJTextFieldInGridBagSystem, this);
+            senden.start();
+
+            Empfangen empfangen = new Empfangen(customJLabelInGridBagSystem);
+            empfangen.start();
+
+
+
+        } catch (TWUsbException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private void addElements() {
         //Monitor
-        monitor = new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 1700, 500, 70,true, 1,1,1, 5, 5,5,5,5);
-        gridBagLayout.setConstraints(monitor, monitor.getCustomJElementInGridBagSystem().getGridBagConstraints());
-        monitor.setText("");
-        this.add(monitor);
+        int side = 2;
+        for(int i = 1; i < 5; i++){
+            if(i % 2 == 0){
+                side = 1;
+            } else  side = 2;
+            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 700, 100, 70,true, side,i,1, 1, 5,5,5,5));
+            gridBagLayout.setConstraints(monitor.get(i-1), monitor.get(i-1).getCustomJElementInGridBagSystem().getGridBagConstraints());
+            monitor.get(i-1).setText("");
+            this.add(monitor.get(i-1));
+        }
 
-        //Main Button
-        CustomJButtonInGridBagSystem mainButton = new CustomJButtonInGridBagSystem("#04E6E6", "#000000", 1000, 200,50, true, 1, 2, 1,1, 5,5,350,350);
-        mainButton.setText("Click Me!");
 
-        mainButton.addActionListener(new ActionListener() {
+
+        CustomJTextFieldInGridBagSystem input = new CustomJTextFieldInGridBagSystem(true,"#04E6E6", "#000000", 700, 100,50, true, 1, 5, 1,2, 100,5,350,350);
+        input.setText("Sent");
+        gridBagLayout.setConstraints(input, input.getCustomJElementInGridBagSystem().getGridBagConstraints());
+        this.add(input);
+        sendTextField = input;
+
+
+        CustomJButtonInGridBagSystem senden = new CustomJButtonInGridBagSystem("#04E6E6", "#000000", 50, 50,20, true, 3, 5, 1,2, 100,5,5,5);
+        senden.setText("Sent");
+        senden.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                whenButtonClicked();
+                send = true;
             }
         });
-        gridBagLayout.setConstraints(mainButton, mainButton.getCustomJElementInGridBagSystem().getGridBagConstraints());
-        this.add(mainButton);
-
+        gridBagLayout.setConstraints(senden, senden.getCustomJElementInGridBagSystem().getGridBagConstraints());
+        this.add(senden);
+        sendButton = senden;
     }
 
-    public void whenButtonClicked(){
-        Random random = new Random();
-        int randomNumber = random.nextInt(getranke.size());
-        System.out.println(randomNumber);
-        if(randomNumber == oldRandom){
-            whenButtonClicked();
-        }
-        oldRandom = randomNumber;
-        if(counter == 0){
-            monitor.setText(getranke.get(randomNumber));
-            counter++;
-        } else if(counter == 1) {
-            monitor.setText(monitor.getText() + "   +   " + getranke.get(randomNumber));
-            counter--;
-        }
-    }
     public GridBagLayout getGridBagLayout() {
         return gridBagLayout;
     }
 
     public void setGridBagLayout(GridBagLayout gridBagLayout) {
         this.gridBagLayout = gridBagLayout;
+    }
+
+    public boolean isSend() {
+        return send;
+    }
+
+    public void setSend(boolean send) {
+        this.send = send;
     }
 }
 

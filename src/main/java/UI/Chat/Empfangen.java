@@ -1,3 +1,6 @@
+package UI.Chat;
+
+import UI.CustomJElements.CustomJLabelInGridBagSystem;
 import de.wenzlaff.twusb.schnittstelle.exception.TWUsbException;
 
 import java.util.ArrayList;
@@ -5,7 +8,11 @@ import java.util.ArrayList;
 public class Empfangen extends Thread {
     private String gottenData = "";
     public MindConnection receivingConnection = new MindConnection();
+    CustomJLabelInGridBagSystem customJLabelInGridBagSystem;
 
+    public Empfangen(CustomJLabelInGridBagSystem customJLabelInGridBagSystem) {
+        this.customJLabelInGridBagSystem = customJLabelInGridBagSystem;
+    }
     @Override
     public void run() {
         while (true) {
@@ -20,7 +27,7 @@ public class Empfangen extends Thread {
             String dataString = receivingConnection.dataToString(data);
 
             gottenData = dataString;
-            System.out.println(gottenData);
+            customJLabelInGridBagSystem.setText(gottenData);
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

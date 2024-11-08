@@ -1,14 +1,12 @@
+package UI.Chat;
+
 import de.wenzlaff.twusb.schnittstelle.TWUsb;
 import de.wenzlaff.twusb.schnittstelle.exception.TWUsbException;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Random;
 
 import static de.wenzlaff.twusb.schnittstelle.TWUsb.ReadAllDigital;
-import java.nio.file.Files;
-import java.io.File;
 
 public class MindConnection {
     public Random random = new Random();

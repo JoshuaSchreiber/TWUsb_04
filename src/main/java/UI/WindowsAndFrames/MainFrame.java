@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class MainFrame extends JFrame {
     private MainWindow mainWindow;
 
-    public MainFrame(ArrayList<String> getraenke) throws IOException {
-        mainWindow = new MainWindow(this, getraenke);
+    public MainFrame() throws IOException, InterruptedException {
+        mainWindow = new MainWindow(this);
 
         setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
