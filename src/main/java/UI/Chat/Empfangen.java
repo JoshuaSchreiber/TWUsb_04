@@ -28,7 +28,7 @@ public class Empfangen extends Thread {
 
             gottenData = dataString;
             customJLabelInGridBagSystem.get(5).setText(customJLabelInGridBagSystem.get(3).getText());
-            customJLabelInGridBagSystem.get(5).setText(gottenData);
+            customJLabelInGridBagSystem.get(3).setText(gottenData);
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

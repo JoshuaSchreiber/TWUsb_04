@@ -100,6 +100,7 @@ public class MainWindow extends Window {
             gridBagLayout.setConstraints(monitor.get(i), monitor.get(i).getCustomJElementInGridBagSystem().getGridBagConstraints());
             monitor.get(i).setText("");
             this.add(monitor.get(i));
+            System.out.println(i-1);
         }
 
 
