@@ -36,6 +36,7 @@ public class MainWindow extends Window {
         this.setLayout(gridBagLayout);
 
         addElements();
+        setBackground(Color.decode("#000000"));
         setVisible(true);
 
 
@@ -76,27 +77,41 @@ public class MainWindow extends Window {
 
     private void addElements() {
         //Monitor
-        int side = 2;
-        for(int i = 1; i < 5; i++){
-            if(i % 2 == 0){
-                side = 1;
-            } else  side = 2;
-            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 500, 100, 70,true, side,i,1, 2, 5,5,5,5));
+
+        monitor.add(0, new CustomJLabelInGridBagSystem(true, "#B5DAD7", "#FFFFFF", 500, 50, 35,true, 1,0,1, 1, 5,5,5,5));
+        monitor.add(1, new CustomJLabelInGridBagSystem(true, "#B5DAD7", "#FFFFFF", 500, 50, 35,true, 2,0,1, 1, 5,5,5,5));
+
+        gridBagLayout.setConstraints(monitor.get(0), monitor.get(0).getCustomJElementInGridBagSystem().getGridBagConstraints());
+        monitor.get(0).setText("You");
+        this.add(monitor.get(0));
+
+        gridBagLayout.setConstraints(monitor.get(1), monitor.get(1).getCustomJElementInGridBagSystem().getGridBagConstraints());
+        monitor.get(1).setText("Sender");
+        this.add(monitor.get(1));
+
+        for(int i = 3; i < 6; i = i+2){
+            monitor.add(i-1, new CustomJLabelInGridBagSystem(true, "#FFDAC1", "#FFFFFF", 500, 100, 70,true, 1,i,1, 1, 5,5,5,5));
+            monitor.add(i, new CustomJLabelInGridBagSystem(true, "#999090", "#FFFFFF", 500, 100, 70,true, 2,i,1, 1, 5,5,5,5));
+
             gridBagLayout.setConstraints(monitor.get(i-1), monitor.get(i-1).getCustomJElementInGridBagSystem().getGridBagConstraints());
             monitor.get(i-1).setText("");
             this.add(monitor.get(i-1));
+
+            gridBagLayout.setConstraints(monitor.get(i), monitor.get(i).getCustomJElementInGridBagSystem().getGridBagConstraints());
+            monitor.get(i).setText("");
+            this.add(monitor.get(i));
         }
 
 
 
-        CustomJTextFieldInGridBagSystem input = new CustomJTextFieldInGridBagSystem(true,"#04E6E6", "#000000", 500, 100,50, true, 1, 5, 1,2, 100,5,350,350);
+        CustomJTextFieldInGridBagSystem input = new CustomJTextFieldInGridBagSystem(true,"#04E6E6", "#000000", 300, 50,50, true, 1, 6, 1,2, 0,5,50,50);
         input.setText("Sent");
         gridBagLayout.setConstraints(input, input.getCustomJElementInGridBagSystem().getGridBagConstraints());
         this.add(input);
         sendTextField = input;
 
 
-        CustomJButtonInGridBagSystem senden = new CustomJButtonInGridBagSystem("#04E6E6", "#000000", 50, 50,20, true, 3, 5, 1,1, 100,5,5,5);
+        CustomJButtonInGridBagSystem senden = new CustomJButtonInGridBagSystem("#04E6E6", "#000000", 50, 50,20, true, 3, 6, 1,1, 100,5,5,5);
         senden.setText("Sent");
         senden.addActionListener(new ActionListener() {
             @Override

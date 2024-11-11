@@ -43,8 +43,8 @@ public class Senden extends Thread {
                     throw new RuntimeException(e);
                 }
                 mainWindow.setSend(false);
-                customJLabelInGridBagSystems.get(3).setText(customJLabelInGridBagSystems.get(1).getText());
-                customJLabelInGridBagSystems.get(1).setText(sendData);
+                customJLabelInGridBagSystems.get(4).setText(customJLabelInGridBagSystems.get(2).getText());
+                customJLabelInGridBagSystems.get(2).setText(sendData);
             }
 
         }
