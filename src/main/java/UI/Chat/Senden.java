@@ -14,9 +14,9 @@ public class Senden extends Thread {
     CustomJTextFieldInGridBagSystem customJTextFieldInGridBagSystem;
     MainWindow mainWindow;
     boolean senden;
-    ArrayList<CustomJLabelInGridBagSystem> customJLabelInGridBagSystems;
+    ArrayList<CustomJTextFieldInGridBagSystem> customJLabelInGridBagSystems;
 
-    public Senden(CustomJTextFieldInGridBagSystem customJTextFieldInGridBagSystem, MainWindow mainWindow, ArrayList<CustomJLabelInGridBagSystem> customJLabelInGridBagSystems, boolean senden) {
+    public Senden(CustomJTextFieldInGridBagSystem customJTextFieldInGridBagSystem, MainWindow mainWindow, ArrayList<CustomJTextFieldInGridBagSystem> customJLabelInGridBagSystems, boolean senden) {
         this.customJTextFieldInGridBagSystem = customJTextFieldInGridBagSystem;
         this.senden = senden;
         this.mainWindow = mainWindow;

@@ -1,6 +1,7 @@
 package UI.Chat;
 
 import UI.CustomJElements.CustomJLabelInGridBagSystem;
+import UI.CustomJElements.CustomJTextFieldInGridBagSystem;
 import de.wenzlaff.twusb.schnittstelle.exception.TWUsbException;
 
 import java.util.ArrayList;
@@ -8,9 +9,9 @@ import java.util.ArrayList;
 public class Empfangen extends Thread {
     private String gottenData = "";
     public MindConnection receivingConnection = new MindConnection();
-    ArrayList<CustomJLabelInGridBagSystem> customJLabelInGridBagSystem;
+    ArrayList<CustomJTextFieldInGridBagSystem> customJLabelInGridBagSystem;
 
-    public Empfangen(ArrayList<CustomJLabelInGridBagSystem> customJLabelInGridBagSystem) {
+    public Empfangen(ArrayList<CustomJTextFieldInGridBagSystem> customJLabelInGridBagSystem) {
         this.customJLabelInGridBagSystem = customJLabelInGridBagSystem;
     }
     @Override
